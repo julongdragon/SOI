@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <style>
+            #myDiv{ text-align:center; color:#00a3f7; margin-top:100px;}
+            .btn{ margin-left:100px;}
+            </style>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+        <meta charset="utf-8">
+            
+            
+            <!-- iPad/iPhone specific css below, add after your main css >
+             <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />
+             <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />
+             -->
+            <!-- If your application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
+            <script type="text/javascript" charset="utf-8" src="phonegap-1.4.1.js"></script>
+            <script type="text/javascript">
+                
+                
+                // If you want to prevent dragging, uncomment this section
+                /*
+                 function preventBehavior(e)
+                 {
+                 e.preventDefault();
+                 };
+                 document.addEventListener("touchmove", preventBehavior, false);
+                 */
+                
+                /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+                 see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+                 for more details -jm */
+                /*
+                 function handleOpenURL(url)
+                 {
+                 // TODO: do something with the url passed in.
+                 }
+                 */
+                
+                function onBodyLoad()
+                {
+                    document.addEventListener("deviceready", onDeviceReady, false);
+                }
+                
+                /* When this function is called, PhoneGap has been initialized and is ready to roll */
+                /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+                 see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+                 for more details -jm */
+                function onDeviceReady()
+                {
+                    // do your thing!
+                    //navigator.notification.alert("PhoneGap is working")
+                    var options = { enableHighAccuracy: true };
+                    watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
+                }
+                
+                </script>
+            <script type="text/javascript" charset="utf-8" src="cordova-2.0.0.js"></script>
+            <script type="text/javascript" charset="utf-8">
+                
+                // Wait for Cordova to load
+                //
+                document.addEventListener("deviceready", onDeviceReady, false);
+                
+                // Cordova is ready
+                //
+                function onDeviceReady() {
+                    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+                }
+                
+                // onSuccess Geolocation
+                //
+                function onSuccess(position) {
+                    var div = document.getElementById('myDiv');
+                    var element = document.getElementById('geolocation');
+                    div.innerHTML = '<b>Latitude:<font color="ff6905"> '           + position.coords.latitude              + '</font></b><br />' +
+                    '<b>Longitude: <font color="ff6905">'          + position.coords.longitude             + '</font></b><br />' +
+                    'Altitude: '           + position.coords.altitude              + '<br />' +
+                    'Accuracy: '           + position.coords.accuracy              + '<br />' +
+                    'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
+                    'Heading: '            + position.coords.heading               + '<br />' +
+                    'Speed: '              + position.coords.speed                 + '<br />' +
+                    'Timestamp: '          + position.timestamp          + '<br />';
+                }
+                //clear wactch
+                function clearWatch() {
+                    if (watchID != null) {
+                        navigator.myDiv.clearWatch(watchID);
+                        watchID = null;
+                    }
+                }
+                
+                // onError Callback receives a PositionError object
+                //
+                function onError(error) {
+                    alert('code: '    + error.code    + '\n' +
+                          'message: ' + error.message + '\n');
+                }
+                
+                //function show map
+                function showPosition(position)
+                {
+                    var latlon=position.coords.latitude+","+position.coords.longitude;
+                    
+                    var img_url="http://maps.googleapis.com/maps/api/staticmap?center="
+                    +latlon+"&zoom=14&size=400x300&sensor=false";
+                    var div2 = document.getElementById('mapholder');
+                    //document.getElementById("mapholder").innerHTML="<img src='"+img_url+"' />";
+                    div2.innerHTML="<img src='"+img_url+"' />";
+                }
+                
+                </script>
+            </head>
+    <body onload="onBodyLoad()">
+        
+        
+        
+        <br/>
+        <center><b><h3>โปรแกรมเก็บค่า พิกัดร้านลูกค้า</h3></b></center>
+        
+        <p id="myDiv">Finding geolocation...</p>
+        <br />
+        <br />
+        <div id="mapholder">
+            
+        </div>
+        <div class="btn">
+            <button onclick="clearWatch();">Clear Watch</button>
+        </div>
+        
+    </body>
+</html>
